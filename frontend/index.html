@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StayNest — Find Your Perfect Stay</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --coral: #FF5A5F;
+      --coral-dark: #e04a4f;
+      --sand: #F7F0E6;
+      --charcoal: #1a1a2e;
+      --slate: #4a4a6a;
+      --mist: #f0ede8;
+      --gold: #C9A84C;
+      --white: #ffffff;
+      --card-shadow: 0 4px 24px rgba(26,26,46,0.08);
+      --card-shadow-hover: 0 12px 40px rgba(26,26,46,0.16);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--sand);
+      color: var(--charcoal);
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      padding: 0 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 72px;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem; font-weight: 700;
+      color: var(--coral); letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+    .logo span { color: var(--charcoal); }
+
+    .nav-search {
+      display: flex; align-items: center; gap: 0;
+      background: var(--white);
+      border: 1.5px solid #e0d9d0;
+      border-radius: 40px;
+      padding: 6px 6px 6px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: box-shadow 0.2s;
+    }
+    .nav-search:focus-within { box-shadow: 0 4px 16px rgba(0,0,0,0.12); border-color: var(--coral); }
+    .nav-search input {
+      border: none; outline: none; background: transparent;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--charcoal);
+      width: 220px;
+    }
+    .nav-search button {
+      background: var(--coral); color: white; border: none; cursor: pointer;
+      border-radius: 30px; padding: 8px 16px; font-size: 0.85rem; font-weight: 600;
+      display: flex; align-items: center; gap: 6px; transition: background 0.2s;
+    }
+    .nav-search button:hover { background: var(--coral-dark); }
+
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .btn-host {
+      font-size: 0.85rem; font-weight: 600; color: var(--charcoal);
+      text-decoration: none; padding: 8px 16px; border-radius: 20px;
+      transition: background 0.2s;
+    }
+    .btn-host:hover { background: var(--mist); }
+    .btn-signup {
+      background: var(--charcoal); color: white; border: none; cursor: pointer;
+      border-radius: 20px; padding: 9px 20px; font-size: 0.85rem; font-weight: 600;
+      font-family: 'DM Sans', sans-serif; text-decoration: none; transition: background 0.2s;
+    }
+    .btn-signup:hover { background: #2d2d4e; }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--charcoal);
+      padding: 80px 5% 90px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=1600&q=80') center/cover;
+      opacity: 0.18;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -1px; left: 0; right: 0; height: 60px;
+      background: var(--sand);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 600px; }
+    .hero-eyebrow {
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      font-weight: 700; line-height: 1.15;
+      color: var(--white); margin-bottom: 16px;
+    }
+    .hero h1 em { color: var(--coral); font-style: italic; }
+    .hero p { color: rgba(255,255,255,0.68); font-size: 1.05rem; line-height: 1.6; }
+
+    /* ── CATEGORIES ── */
+    .categories {
+      background: var(--white);
+      padding: 0 5%;
+      border-bottom: 1px solid #e8e2d9;
+      position: sticky; top: 72px; z-index: 90;
+    }
+    .categories-scroll {
+      display: flex; gap: 4px; overflow-x: auto;
+      scrollbar-width: none; padding: 0 0 0 0;
+    }
+    .categories-scroll::-webkit-scrollbar { display: none; }
+    .cat-btn {
+      flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 6px;
+      padding: 12px 16px; border: none; background: transparent; cursor: pointer;
+      color: var(--slate); font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
+      font-weight: 500; border-bottom: 2px solid transparent;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .cat-btn .cat-icon { font-size: 1.3rem; }
+    .cat-btn:hover { color: var(--charcoal); }
+    .cat-btn.active { color: var(--charcoal); border-bottom-color: var(--charcoal); font-weight: 600; }
+
+    /* ── CONTROLS ── */
+    .controls {
+      padding: 28px 5% 8px;
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    }
+    .listing-count { font-size: 0.9rem; color: var(--slate); }
+    .listing-count strong { color: var(--charcoal); }
+    .tax-toggle {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.85rem; font-weight: 500; color: var(--slate); cursor: pointer;
+    }
+    .toggle-switch {
+      width: 40px; height: 22px; background: #ccc; border-radius: 11px; position: relative;
+      transition: background 0.2s; flex-shrink: 0;
+    }
+    .toggle-switch::after {
+      content: ''; position: absolute; top: 3px; left: 3px;
+      width: 16px; height: 16px; background: white; border-radius: 50%;
+      transition: transform 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    .toggle-switch.on { background: var(--coral); }
+    .toggle-switch.on::after { transform: translateX(18px); }
+
+    /* ── GRID ── */
+    .grid-section { padding: 16px 5% 60px; }
+    .listings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    /* ── CARD ── */
+    .listing-card {
+      background: var(--white); border-radius: 18px;
+      overflow: hidden; cursor: pointer;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s;
+      animation: fadeUp 0.5s ease both;
+      text-decoration: none; color: inherit; display: block;
+    }
+    .listing-card:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-img-wrap {
+      position: relative; height: 200px; overflow: hidden;
+    }
+    .card-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .listing-card:hover .card-img-wrap img { transform: scale(1.06); }
+
+    .card-category {
+      position: absolute; top: 12px; left: 12px;
+      background: rgba(26,26,46,0.75); backdrop-filter: blur(6px);
+      color: white; font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 12px;
+    }
+    .card-wishlist {
+      position: absolute; top: 10px; right: 12px;
+      background: rgba(255,255,255,0.9); border: none; cursor: pointer;
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; transition: transform 0.15s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    .card-wishlist:hover { transform: scale(1.15); }
+    .card-wishlist.liked { color: var(--coral); }
+
+    .card-body { padding: 16px; }
+    .card-location {
+      font-size: 0.72rem; color: var(--slate); text-transform: uppercase;
+      letter-spacing: 1px; margin-bottom: 4px; font-weight: 500;
+    }
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem; font-weight: 700; line-height: 1.3;
+      color: var(--charcoal); margin-bottom: 10px;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .card-meta {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 10px; border-top: 1px solid #f0ede8;
+    }
+    .card-price { font-size: 1rem; font-weight: 700; color: var(--charcoal); }
+    .card-price span { font-size: 0.78rem; font-weight: 400; color: var(--slate); }
+    .card-rating {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 0.82rem; font-weight: 600; color: var(--charcoal);
+    }
+    .card-rating .star { color: var(--coral); font-size: 0.85rem; }
+    .card-rating .reviews { font-weight: 400; color: var(--slate); }
+
+    /* ── LOADING / ERROR / EMPTY ── */
+    .state-container {
+      grid-column: 1/-1; text-align: center; padding: 80px 20px;
+    }
+    .loader {
+      width: 40px; height: 40px; border: 3px solid #e8e2d9;
+      border-top-color: var(--coral); border-radius: 50%;
+      animation: spin 0.8s linear infinite; margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .state-container p { color: var(--slate); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--charcoal); color: rgba(255,255,255,0.7);
+      padding: 48px 5% 32px;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px;
+      margin-bottom: 40px;
+    }
+    .footer-brand .logo { color: var(--coral); }
+    .footer-brand p { margin-top: 12px; font-size: 0.88rem; line-height: 1.6; max-width: 280px; }
+    .footer-col h4 {
+      color: white; font-size: 0.82rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px;
+    }
+    .footer-col a {
+      display: block; color: rgba(255,255,255,0.6); text-decoration: none;
+      font-size: 0.88rem; margin-bottom: 10px; transition: color 0.15s;
+    }
+    .footer-col a:hover { color: var(--coral); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.8rem;
+    }
+    .footer-badge {
+      background: var(--coral); color: white; font-size: 0.7rem; font-weight: 700;
+      padding: 4px 10px; border-radius: 4px; letter-spacing: 1px; text-transform: uppercase;
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(26,26,46,0.6); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: white; border-radius: 24px; max-width: 680px; width: 100%;
+      max-height: 90vh; overflow-y: auto;
+      transform: scale(0.92); transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .modal-overlay.open .modal { transform: scale(1); }
+    .modal-img { width: 100%; height: 280px; object-fit: cover; }
+    .modal-body { padding: 28px; }
+    .modal-location { font-size: 0.78rem; color: var(--slate); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+    .modal-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; margin: 8px 0 16px; }
+    .modal-stats {
+      display: flex; gap: 20px; padding: 14px 0; border-top: 1px solid #f0ede8; border-bottom: 1px solid #f0ede8; margin-bottom: 16px;
+    }
+    .modal-stat { text-align: center; }
+    .modal-stat strong { display: block; font-size: 1rem; color: var(--charcoal); }
+    .modal-stat span { font-size: 0.75rem; color: var(--slate); }
+    .modal-desc { font-size: 0.92rem; line-height: 1.7; color: var(--slate); margin-bottom: 20px; }
+    .modal-amenities { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+    .amenity-tag {
+      background: var(--sand); color: var(--charcoal); font-size: 0.78rem; font-weight: 500;
+      padding: 6px 12px; border-radius: 20px;
+    }
+    .modal-footer-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 16px; border-top: 1px solid #f0ede8;
+    }
+    .modal-price-big { font-size: 1.5rem; font-weight: 700; color: var(--charcoal); }
+    .modal-price-big span { font-size: 0.85rem; font-weight: 400; color: var(--slate); }
+    .btn-book {
+      background: var(--coral); color: white; border: none; cursor: pointer;
+      border-radius: 12px; padding: 12px 28px; font-size: 0.95rem; font-weight: 700;
+      font-family: 'DM Sans', sans-serif; transition: background 0.2s, transform 0.1s;
+    }
+    .btn-book:hover { background: var(--coral-dark); transform: translateY(-1px); }
+    .btn-book:active { transform: translateY(0); }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      background: white; border: none; cursor: pointer; width: 36px; height: 36px;
+      border-radius: 50%; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12); z-index: 10;
+    }
+
+    @media (max-width: 768px) {
+      .nav-search { display: none; }
+      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+      .hero { padding: 60px 5% 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="logo">Stay<span>Nest</span></a>
+  <div class="nav-search">
+    <input type="text" id="searchInput" placeholder="Where are you going?" />
+    <button onclick="handleSearch()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Search
+    </button>
+  </div>
+  <div class="nav-actions">
+    <a href="#" class="btn-host">List your home</a>
+    <a href="#" class="btn-signup">Sign up</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <p class="hero-eyebrow">✦ Curated Stays Worldwide</p>
+    <h1>Find your next <em>perfect escape</em></h1>
+    <p>From Balinese villas to Scottish castles — discover handpicked rentals that turn travel into a story worth telling.</p>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<div class="categories">
+  <div class="categories-scroll" id="categoryScroll">
+    <button class="cat-btn active" onclick="filterCat('', this)"><span class="cat-icon">🏠</span>All</button>
+    <button class="cat-btn" onclick="filterCat('Trending', this)"><span class="cat-icon">🔥</span>Trending</button>
+    <button class="cat-btn" onclick="filterCat('Beach', this)"><span class="cat-icon">🏖️</span>Beach</button>
+    <button class="cat-btn" onclick="filterCat('Mountains', this)"><span class="cat-icon">⛰️</span>Mountains</button>
+    <button class="cat-btn" onclick="filterCat('Castles', this)"><span class="cat-icon">🏰</span>Castles</button>
+    <button class="cat-btn" onclick="filterCat('Lake', this)"><span class="cat-icon">🏞️</span>Lake</button>
+    <button class="cat-btn" onclick="filterCat('Camping', this)"><span class="cat-icon">⛺</span>Camping</button>
+    <button class="cat-btn" onclick="filterCat('Amazing Views', this)"><span class="cat-icon">🌅</span>Amazing Views</button>
+    <button class="cat-btn" onclick="filterCat('Iconic Cities', this)"><span class="cat-icon">🏙️</span>Iconic Cities</button>
+    <button class="cat-btn" onclick="filterCat('Farms', this)"><span class="cat-icon">🌾</span>Farms</button>
+    <button class="cat-btn" onclick="filterCat('Luxury', this)"><span class="cat-icon">💎</span>Luxury</button>
+    <button class="cat-btn" onclick="filterCat('Rooms', this)"><span class="cat-icon">🛏️</span>Rooms</button>
+  </div>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="listing-count" id="listingCount">Loading listings...</div>
+  <label class="tax-toggle" onclick="toggleTax()">
+    <div class="toggle-switch" id="taxToggle"></div>
+    Display total with taxes
+  </label>
+</div>
+
+<!-- GRID -->
+<section class="grid-section">
+  <div class="listings-grid" id="listingsGrid">
+    <div class="state-container"><div class="loader"></div><p>Fetching stays for you…</p></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="/" class="logo">Stay<span style="color:white">Nest</span></a>
+      <p>Discover amazing places to stay around the world. Your perfect vacation rental is just a click away.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <a href="#">All Listings</a>
+      <a href="#">New Arrivals</a>
+      <a href="#">Top Rated</a>
+      <a href="#">List Your Property</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About Us</a>
+      <a href="#">Careers</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 StayNest. All rights reserved.</span>
+    <span class="footer-badge">DevOps Project</span>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalContent">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <img id="modalImg" src="" alt="" class="modal-img" />
+    <div class="modal-body">
+      <p class="modal-location" id="modalLocation"></p>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-stats">
+        <div class="modal-stat"><strong id="mGuests">—</strong><span>Guests</span></div>
+        <div class="modal-stat"><strong id="mBeds">—</strong><span>Bedrooms</span></div>
+        <div class="modal-stat"><strong id="mBaths">—</strong><span>Bathrooms</span></div>
+        <div class="modal-stat"><strong id="mRating">—</strong><span>Rating ⭐</span></div>
+      </div>
+      <p class="modal-desc" id="modalDesc"></p>
+      <div class="modal-amenities" id="modalAmenities"></div>
+      <div class="modal-footer-row">
+        <div>
+          <div class="modal-price-big" id="modalPrice"></div>
+          <div style="font-size:0.75rem;color:var(--slate);margin-top:2px">+18% GST applicable</div>
+        </div>
+        <button class="btn-book" onclick="alert('Booking feature coming soon! 🚀')">Reserve Now</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // When served via Docker/Nginx, /api is proxied to backend container
+  // For local dev without Docker, change to: http://localhost:5000/api
+  const API_BASE = window.location.port === '3000' || window.location.port === '80' || window.location.port === ''
+    ? '/api'
+    : 'http://localhost:5000/api';
+  let allListings = [];
+  let showTax = false;
+  let liked = new Set();
+
+  async function fetchListings(params = '') {
+    const grid = document.getElementById('listingsGrid');
+    grid.innerHTML = '<div class="state-container"><div class="loader"></div><p>Fetching stays for you…</p></div>';
+    try {
+      const res = await fetch(`${API_BASE}/listings${params}`);
+      const json = await res.json();
+      allListings = json.data || [];
+      renderGrid(allListings);
+    } catch (e) {
+      grid.innerHTML = `<div class="state-container"><p style="color:var(--coral)">⚠️ Could not connect to backend. Make sure the API is running on port 5000.</p></div>`;
+    }
+  }
+
+  function renderGrid(listings) {
+    const grid = document.getElementById('listingsGrid');
+    const count = document.getElementById('listingCount');
+    count.innerHTML = `<strong>${listings.length}</strong> stays found`;
+
+    if (!listings.length) {
+      grid.innerHTML = '<div class="state-container"><p>No stays found for your search. Try a different category.</p></div>';
+      return;
+    }
+
+    grid.innerHTML = listings.map((l, i) => {
+      const price = showTax ? Math.round(l.price * 1.18) : l.price;
+      const isLiked = liked.has(l._id);
+      return `
+        <a class="listing-card" style="animation-delay:${i * 0.04}s" onclick="openModal('${l._id}'); return false;" href="#">
+          <div class="card-img-wrap">
+            <img src="${l.image}" alt="${l.title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=60'" />
+            <span class="card-category">${l.category}</span>
+            <button class="card-wishlist ${isLiked ? 'liked' : ''}" onclick="toggleLike(event, '${l._id}')">${isLiked ? '❤️' : '🤍'}</button>
+          </div>
+          <div class="card-body">
+            <p class="card-location">${l.location}, ${l.country}</p>
+            <p class="card-title">${l.title}</p>
+            <div class="card-meta">
+              <div class="card-price">₹ ${price.toLocaleString()} <span>/ night${showTax ? ' (incl. GST)' : ''}</span></div>
+              <div class="card-rating"><span class="star">★</span> ${l.rating} <span class="reviews">(${l.reviews})</span></div>
+            </div>
+          </div>
+        </a>`;
+    }).join('');
+  }
+
+  function toggleLike(e, id) {
+    e.preventDefault(); e.stopPropagation();
+    if (liked.has(id)) liked.delete(id); else liked.add(id);
+    renderGrid(allListings);
+  }
+
+  function filterCat(cat, btn) {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    fetchListings(cat ? `?category=${encodeURIComponent(cat)}` : '');
+  }
+
+  function handleSearch() {
+    const q = document.getElementById('searchInput').value.trim();
+    if (q) fetchListings(`?search=${encodeURIComponent(q)}`);
+    else fetchListings();
+  }
+
+  document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') handleSearch(); });
+
+  function toggleTax() {
+    showTax = !showTax;
+    document.getElementById('taxToggle').classList.toggle('on', showTax);
+    renderGrid(allListings);
+  }
+
+  async function openModal(id) {
+    const listing = allListings.find(l => l._id === id);
+    if (!listing) return;
+    const price = showTax ? Math.round(listing.price * 1.18) : listing.price;
+    document.getElementById('modalImg').src = listing.image;
+    document.getElementById('modalLocation').textContent = `${listing.location}, ${listing.country}`;
+    document.getElementById('modalTitle').textContent = listing.title;
+    document.getElementById('mGuests').textContent = listing.guests;
+    document.getElementById('mBeds').textContent = listing.bedrooms;
+    document.getElementById('mBaths').textContent = listing.bathrooms;
+    document.getElementById('mRating').textContent = listing.rating;
+    document.getElementById('modalDesc').textContent = listing.description || 'A beautiful property awaiting your visit.';
+    document.getElementById('modalAmenities').innerHTML = (listing.amenities || []).map(a => `<span class="amenity-tag">✓ ${a}</span>`).join('');
+    document.getElementById('modalPrice').innerHTML = `₹ ${price.toLocaleString()} <span>/ night</span>`;
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(e) {
+    if (e && e.target !== document.getElementById('modalOverlay') && !e.target.classList.contains('modal-close')) return;
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Init
+  fetchListings();
+</script>
+</body>
+</html>
