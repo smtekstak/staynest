@@ -32,9 +32,7 @@ services:
 
   # ── Backend (Node/Express) ────────────────────────────────
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: swapnilmali101/staynest-backend
     container_name: staynest-backend
     restart: unless-stopped
     environment:
@@ -57,9 +55,7 @@ services:
 
   # ── Seed (one-shot job) ───────────────────────────────────
   seed:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: swapnilmali101/staynest-seed
     container_name: staynest-seed
     environment:
       MONGO_URI: mongodb://staynest_user:staynest_pass@mongo:27017/staynest?authSource=staynest
@@ -73,9 +69,7 @@ services:
 
   # ── Frontend (Nginx) ──────────────────────────────────────
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: swapnilmali101/staynest-frontend
     container_name: staynest-frontend
     restart: unless-stopped
     ports:
