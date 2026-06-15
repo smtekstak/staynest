@@ -86,6 +86,14 @@ docker compose up --build
 
 Open **http://localhost:3000** in your browser.
 
+### Screenshots 
+
+**1. Web Page**
+    ![](screenshots/web-page.png)
+
+**2. Search tab and footer**
+    ![](screenshots/search-tabs.png)
+
 ### Tear down
 
 ```bash
