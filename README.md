@@ -156,4 +156,25 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
+<!-- Start author box -->
+<table align="center" width="100%">
+    <tr>
+        <td align="center" valign="middle" width="30%">
+            <img src="" alt="Swapnil Mali" width="150" style="border-radius: 50%; max-width="100%;">
+        </td>
+        <td align="left" valign="top" width="70%">
+            <h2>SWAPNIL MALI.</h2>
+            <p>
+                <a href="https://github.com/swapnilmali101" target="_blank" align="center">
+                   <img src="https://img.shields.io/badge/GitHub-Profile-181717?style=for-the-badge&logo=github&logoColor=yellow" alt="GitHub Profile">
+                </a>
+            </p>
+            <p>ksdfgjol sdlkgjl dsklgjlk sdlkgjdsl sdgklsdjg  sdkgjklsd dsgjklsdj g sdklgjlsdkg</p>
+        </td>
+    </tr>
+</table>
+
+<!-- End author box -->
+
+
 > Made with ❤️ by [swapnilmali101](https://github.com/swapnilmali101) — Happy 📦Containerizing, 🏗️Architecturing and ⛴️Shipping the projects! 🌍
