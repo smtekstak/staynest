@@ -75,7 +75,7 @@ staynest/
 
 ```bash
 # Clone the repo
-git clone https://github.com/swapnilmali101/staynest.git
+git clone https://github.com/devops-swapnil/staynest.git
 cd staynest
 
 # Build and start all containers
@@ -164,7 +164,7 @@ This project is open source and available under the [MIT License](LICENSE).
         <td align="left" valign="top" width="70%">
             <h2>SWAPNIL MALI.</h2>
             <p>
-                <a href="https://github.com/swapnilmali101" target="_blank" align="center">
+                <a href="https://github.com/devops-swapnil" target="_blank" align="center">
                    <img src="https://img.shields.io/badge/GitHub-Profile-181717?style=for-the-badge&logo=github&logoColor=yellow" alt="GitHub Profile">
                 </a>
             </p>
