@@ -1,4 +1,4 @@
-# 🏡 StayNest — Airbnb-like Full-Stack Rental Platform
+# 🏡 StayNest - Airbnb-like Full-Stack Rental Platform
 
 > A production-grade vacation rental web app demonstrating containerized full-stack deployment with Docker, MongoDB, Express, and Nginx.
 
@@ -128,8 +128,8 @@ Base URL: `http://localhost:5000/api`
 
 ## 🐳 Docker Details
 
-- **Frontend**: `nginx:1.25-alpine` — serves static files, proxies `/api/*` to backend
-- **Backend**: `node:20-alpine` (multi-stage build) — runs as non-root user for security
+- **Frontend**: `nginx:1.25-alpine` - serves static files, proxies `/api/*` to backend
+- **Backend**: `node:20-alpine` (multi-stage build) - runs as non-root user for security
 - **MongoDB**: `mongo:7.0` with persistent volume and health checks
 - **Seed**: One-shot job that seeds 30 listings on first start
 - All services communicate over an isolated Docker bridge network
